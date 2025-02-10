@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Closet.</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar (20%) -->
+             
+            <div class="col-lg-3 col-md-4 sidebar">
+                <h3 class="text-center">Sort.</h3>
+                        <!-- Search Bar -->
+                    <div class="mb-3">
+                        <input type="text" id="searchBar" class="form-control" placeholder="Search items..." />
+                    </div>
+
+                    <!-- Filter Section -->
+                    <div class="card p-3 shadow-sm sticky-top">
+                        <!-- Type Filter -->
+                        <div class="mb-3">
+                            <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                data-target="#typeFilter" aria-expanded="false" aria-controls="typeFilter">
+                                Select Type <span class="float-right">&#9662;</span>
+                            </button>
+                            <div class="collapse mt-2" id="typeFilter">
+                                {% for type in unique_types|sort %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input type-filter" value="{{ type }}" id="type-{{ type }}">
+                                    <label class="form-check-label" for="type-{{ type }}">{{ type }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                        <!-- Color Filter -->
+                        <div class="mb-3">
+                            <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                data-target="#colorFilter" aria-expanded="false" aria-controls="colorFilter">
+                                Select Color <span class="float-right">&#9662;</span>
+                            </button>
+                            <div class="collapse mt-2" id="colorFilter">
+                                {% for color in unique_colors|sort %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input color-filter" value="{{ color }}" id="color-{{ color }}">
+                                    <label class="form-check-label" for="color-{{ color }}">{{ color }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                        <!-- Style Filter -->
+                        <div class="mb-3">
+                            <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                data-target="#styleFilter" aria-expanded="false" aria-controls="styleFilter">
+                                Select Style <span class="float-right">&#9662;</span>
+                            </button>
+                            <div class="collapse mt-2" id="styleFilter">
+                                {% for style in unique_styles|sort %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input style-filter" value="{{ style }}" id="style-{{ style }}">
+                                    <label class="form-check-label" for="style-{{ style }}">{{ style }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                        <!-- Brand Filter -->
+                        <div class="mb-3">
+                            <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                data-target="#brandFilter" aria-expanded="false" aria-controls="brandFilter">
+                                Select Brand <span class="float-right">&#9662;</span>
+                            </button>
+                            <div class="collapse mt-2" id="brandFilter">
+                                {% for brand in unique_brands|sort %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input brand-filter" value="{{ brand }}" id="brand-{{ brand }}">
+                                    <label class="form-check-label" for="brand-{{ brand }}">{{ brand }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    
+                        <!-- Size Filter -->
+                        <div class="mb-3">
+                            <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                data-target="#sizeFilter" aria-expanded="false" aria-controls="sizeFilter">
+                                Select Size <span class="float-right">&#9662;</span>
+                            </button>
+                            <div class="collapse mt-2" id="sizeFilter">
+                                {% for size in unique_sizes %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input size-filter" value="{{ size }}" id="size-{{ size }}">
+                                    <label class="form-check-label" for="size-{{ size }}">{{ size }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+
+
+            <!-- Main -->
+            <div class="col-lg-9 col-md-8 content">
+                <div class="row align-items-center pb-2">
+                    <div class="col">
+                        <h1 class="mb-0">Hello, Aamir.</h1>
+                        <p class="mb-0">Welcome to your closet.</p>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-dark d-md-none" type="button" data-toggle="collapse" data-target="#filterSidebar">
+                            Filter
+                        </button>
+                        </div>
+                        </div>
+                        
+                        
+                        <!-- Collapsible Sidebar -->
+                        <div class="hide-on-desktop collapse d-md-block" id="filterSidebar">
+                            <div class="card p-3 shadow-sm">
+                                <!-- Existing filter content here -->
+                                 
+                                <!-- Filter Section -->
+                                <div class="card p-3 shadow-sm sticky-top">
+                                    <!-- Type Filter -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                            data-target="#typeFilter" aria-expanded="false" aria-controls="typeFilter">
+                                            Select Type <span class="float-right">&#9662;</span>
+                                        </button>
+                                        <div class="collapse mt-2" id="typeFilter">
+                                            {% for type in unique_types|sort %}
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input type-filter" value="{{ type }}"
+                                                    id="type-{{ type }}">
+                                                <label class="form-check-label" for="type-{{ type }}">{{ type }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Color Filter -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                            data-target="#colorFilter" aria-expanded="false" aria-controls="colorFilter">
+                                            Select Color <span class="float-right">&#9662;</span>
+                                        </button>
+                                        <div class="collapse mt-2" id="colorFilter">
+                                            {% for color in unique_colors|sort %}
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input color-filter" value="{{ color }}"
+                                                    id="color-{{ color }}">
+                                                <label class="form-check-label" for="color-{{ color }}">{{ color }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Style Filter -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                            data-target="#styleFilter" aria-expanded="false" aria-controls="styleFilter">
+                                            Select Style <span class="float-right">&#9662;</span>
+                                        </button>
+                                        <div class="collapse mt-2" id="styleFilter">
+                                            {% for style in unique_styles|sort %}
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input style-filter" value="{{ style }}"
+                                                    id="style-{{ style }}">
+                                                <label class="form-check-label" for="style-{{ style }}">{{ style }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                        
+                                    <!-- Brand Filter -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                            data-target="#brandFilter" aria-expanded="false" aria-controls="brandFilter">
+                                            Select Brand <span class="float-right">&#9662;</span>
+                                        </button>
+                                        <div class="collapse mt-2" id="brandFilter">
+                                            {% for brand in unique_brands|sort %}
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input brand-filter" value="{{ brand }}"
+                                                    id="brand-{{ brand }}">
+                                                <label class="form-check-label" for="brand-{{ brand }}">{{ brand }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                        
+                        
+                                    <!-- Size Filter -->
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-dark w-100 text-left" type="button" data-toggle="collapse"
+                                            data-target="#sizeFilter" aria-expanded="false" aria-controls="sizeFilter">
+                                            Select Size <span class="float-right">&#9662;</span>
+                                        </button>
+                                        <div class="collapse mt-2" id="sizeFilter">
+                                            {% for size in unique_sizes %}
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input size-filter" value="{{ size }}"
+                                                    id="size-{{ size }}">
+                                                <label class="form-check-label" for="size-{{ size }}">{{ size }}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="clothingGrid">
+                            {% for item in clothes %}
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-6 mb-4 clothing-item" data-type="{{ item[1] }}"
+                                data-color="{{ item[4] }}" data-brand="{{ item[2] }}" data-style="{{ item[5] }}" data-size="{{ item[6] }}"
+                                data-accent-colors="{{ item[7] }}" data-pattern="{{ item[8] }}" data-material="{{ item[9] }}"
+                                data-occasion="{{ item[10] }}" data-season="{{ item[11] }}" data-formality-level="{{ item[12] }}"
+                                data-layering-potential="{{ item[13] }}" data-state="{{ item[14] }}" data-care-instructions="{{ item[15] }}"
+                                data-versatility="{{ item[16] }}" data-last-worn="{{ item[17] }}">
+                                <div class="card shadow-sm">
+                                    <!-- Optionally include an image if needed -->
+                                    <img src="{{ url_for('static', filename=item[3]) }}" class="card-img-top" alt="{{ item[0] }}">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ item[0] }}</h5>
+                                        <h3 class="card-text"><strong>{{ item[2] }}</strong> </h3>
+                                        <p class="card-text"><strong>{{ item[1] }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        </div>
+    <!-- Modal for displaying clothing details -->
+    <div class="modal fade" id="clothingModal" tabindex="-1" aria-labelledby="clothingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clothingModalLabel">Clothing Item Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" class="img-fluid mb-3" alt="Clothing Item Image">
+                    <h5 id="modalName">Item Name</h5>
+                    <p><strong>Type:</strong> <span id="modalType"></span></p>
+                    <p><strong>Color:</strong> <span id="modalColor"></span></p>
+                    <p><strong>Brand:</strong> <span id="modalBrand"></span></p>
+                    <p><strong>Style:</strong> <span id="modalStyle"></span></p>
+                    <p><strong>Size:</strong> <span id="modalSize"></span></p>
+                    <p><strong>Accent Colors:</strong> <span id="modalAccentColors"></span></p>
+                    <p><strong>Pattern:</strong> <span id="modalPattern"></span></p>
+                    <p><strong>Material:</strong> <span id="modalMaterial"></span></p>
+                    <p><strong>Occasion:</strong> <span id="modalOccasion"></span></p>
+                    <p><strong>Season:</strong> <span id="modalSeason"></span></p>
+                    <p><strong>Formality Level:</strong> <span id="modalFormalityLevel"></span></p>
+                    <p><strong>Layering Potential:</strong> <span id="modalLayeringPotential"></span></p>
+                    <p><strong>State:</strong> <span id="modalState"></span></p>
+                    <p><strong>Care Instructions:</strong> <span id="modalCareInstructions"></span></p>
+                    <p><strong>Versatility:</strong> <span id="modalVersatility"></span></p>
+                    <p><strong>Last Worn:</strong> <span id="modalLastWorn"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closingBtn" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+                // This initializes the modal and binds the 'close' action
+        var myModal = new bootstrap.Modal(document.getElementById('clothingModal'), {
+            keyboard: true  // Optionally, you can allow closing the modal with the keyboard (Esc key)
+        });
+
+        $(document).ready(function () {
+            function filterClothing() {
+                let selectedTypes = $(".type-filter:checked").map(function () { return this.value; }).get();
+                let selectedColors = $(".color-filter:checked").map(function () { return this.value; }).get();
+                let selectedStyles = $(".style-filter:checked").map(function () { return this.value; }).get();
+                let selectedBrands = $(".brand-filter:checked").map(function () { return this.value; }).get();
+                let selectedSizes = $(".size-filter:checked").map(function () { return this.value; }).get();
+                let searchQuery = $("#searchBar").val().toLowerCase();
+
+                $(".clothing-item").each(function () {
+                    let type = $(this).data("type");
+                    let color = $(this).data("color");
+                    let brand = $(this).data("brand");
+                    let style = $(this).data("style");
+                    let size = $(this).data("size");
+                    let name = $(this).find(".card-title").text().toLowerCase();
+
+                    let typeMatch = selectedTypes.length === 0 || selectedTypes.includes(type);
+                    let colorMatch = selectedColors.length === 0 || selectedColors.includes(color);
+                    let styleMatch = selectedStyles.length === 0 || selectedStyles.includes(style);
+                    let brandMatch = selectedBrands.length === 0 || selectedBrands.includes(brand);
+                    let sizeMatch = selectedSizes.length === 0 || selectedSizes.includes(size);
+                    let searchMatch = name.includes(searchQuery);
+
+                    if (typeMatch && colorMatch && styleMatch && brandMatch && sizeMatch && searchMatch) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                console.log("Search Query:", searchQuery);
+                console.log("Item Name:", name);
+            }
+
+            // Apply filter on change of checkboxes
+            $(".filter-checkbox").change(function () {
+                filterClothing();
+            });
+
+            // Apply filter on keyup of search bar
+            $("#searchBar").keyup(function () {
+                filterClothing();
+                console.log("Search Query:", searchQuery);
+                console.log("Item Name:", name);
+            });
+
+            // Initial filter when the page loads
+            filterClothing();
+
+            // Apply filter on change of checkboxes or search bar
+            $(".form-check-input").change(filterClothing);
+            $("#searchBar").keyup(filterClothing);
+
+
+            // Modal functionality to display clothing details when a card is clicked
+            $(".clothing-item").on("click", function () {
+                // Get data attributes from the clicked clothing item
+                let name = $(this).find(".card-title").text();
+                let imagePath = $(this).find("img").attr("src");
+                let type = $(this).data("type");
+                let color = $(this).data("color");
+                let brand = $(this).data("brand");
+                let style = $(this).data("style");
+                let size = $(this).data("size");
+                let accentColors = $(this).data("accent-colors");
+                let pattern = $(this).data("pattern");
+                let material = $(this).data("material");
+                let occasion = $(this).data("occasion");
+                let season = $(this).data("season");
+                let formalityLevel = $(this).data("formality-level");
+                let layeringPotential = $(this).data("layering-potential");
+                let state = $(this).data("state");
+                let careInstructions = $(this).data("care-instructions");
+                let versatility = $(this).data("versatility");
+                let lastWorn = $(this).data("last-worn");
+
+                // Set the modal content
+                $("#modalName").text(name);
+                $("#modalImage").attr("src", imagePath);
+                $("#modalType").text(type);
+                $("#modalColor").text(color);
+                $("#modalBrand").text(brand);
+                $("#modalStyle").text(style);
+                $("#modalSize").text(size);
+                $("#modalAccentColors").text(accentColors);
+                $("#modalPattern").text(pattern);
+                $("#modalMaterial").text(material);
+                $("#modalOccasion").text(occasion);
+                $("#modalSeason").text(season);
+                $("#modalFormalityLevel").text(formalityLevel);
+                $("#modalLayeringPotential").text(layeringPotential);
+                $("#modalState").text(state);
+                $("#modalCareInstructions").text(careInstructions);
+                $("#modalVersatility").text(versatility);
+                $("#modalLastWorn").text(lastWorn);
+
+                // Show the modal
+                $('#clothingModal').modal('show');
+            });
+        });
+
+    </script>
+
+    
+</body>
+</html>

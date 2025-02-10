@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Closet.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Welcome Aamir.</h1>
+
+        <!-- Filter Section -->
+        <div class="card mb-4 p-3 shadow-sm">
+            <h5 class="card-title text-center">Filter Your Collection</h5>
+            <div class="row justify-content-center">
+                <!-- Type Filter -->
+                <div class="col-md-4">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="typeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Type
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="typeDropdown">
+                            {% for type in unique_types %}
+                                <div class="dropdown-item">
+                                    <input type="checkbox" class="filter-checkbox type-filter" value="{{ type }}"> {{ type }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Color Filter -->
+                <div class="col-md-4">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="colorDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Color
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="colorDropdown">
+                            {% for color in unique_colors %}
+                                <div class="dropdown-item">
+                                    <input type="checkbox" class="filter-checkbox color-filter" value="{{ color }}"> {{ color }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Style Filter -->
+                <div class="col-md-4">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="styleDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Style
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="styleDropdown">
+                            {% for style in unique_styles %}
+                                <div class="dropdown-item">
+                                    <input type="checkbox" class="filter-checkbox style-filter" value="{{ style }}"> {{ style }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clothing Items Grid -->
+        <div class="row" id="clothingGrid">
+            {% for item in clothes %}
+                <div class="col-md-4 col-sm-6 mb-4 clothing-item" 
+                     data-type="{{ item[1] }}" 
+                     data-color="{{ item[4] }}" 
+                     data-style="{{ item[5] }}">
+                    <div class="card shadow-sm">
+                        <img src="{{ url_for('static', filename=item[3]) }}" class="card-img-top" alt="{{ item[0] }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ item[0] }}</h5>
+                            <p class="card-text"><strong>Type:</strong> {{ item[1] }}</p>
+                            <p class="card-text"><strong>Brand:</strong> {{ item[2] }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function filterClothing() {
+                let selectedTypes = $(".type-filter:checked").map(function() { return this.value; }).get();
+                let selectedColors = $(".color-filter:checked").map(function() { return this.value; }).get();
+                let selectedStyles = $(".style-filter:checked").map(function() { return this.value; }).get();
+
+                $(".clothing-item").each(function() {
+                    let type = $(this).data("type");
+                    let color = $(this).data("color");
+                    let style = $(this).data("style");
+
+                    let typeMatch = selectedTypes.length === 0 || selectedTypes.includes(type);
+                    let colorMatch = selectedColors.length === 0 || selectedColors.includes(color);
+                    let styleMatch = selectedStyles.length === 0 || selectedStyles.includes(style);
+
+                    if (typeMatch && colorMatch && styleMatch) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+
+            // Apply filter on change
+            $(".filter-checkbox").change(filterClothing);
+        });
+    </script>
+
+</body>
+</html>

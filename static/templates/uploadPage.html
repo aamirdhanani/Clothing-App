@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Clothing Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+        form h1 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        form .form-group {
+            margin-bottom: 15px;
+        }
+        form .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        form .form-group input,
+        form .form-group select,
+        form .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        form .form-group input[type="file"] {
+            padding: 0;
+        }
+        form button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form id="clothingForm" enctype="multipart/form-data">
+        <h1>Upload Clothing Item</h1>
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="Name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Type</label>
+            <input type="text" id="type" name="Type" required>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="Brand">
+        </div>
+
+        <div class="form-group">
+            <label for="size">Size</label>
+            <input type="text" id="size" name="Size">
+        </div>
+
+        <div class="form-group">
+            <label for="primaryColor">Primary Color</label>
+            <input type="text" id="primaryColor" name="PrimaryColor">
+        </div>
+
+        <div class="form-group">
+            <label for="accentColors">Accent Colors</label>
+            <input type="text" id="accentColors" name="AccentColors">
+        </div>
+
+        <div class="form-group">
+            <label for="pattern">Pattern</label>
+            <input type="text" id="pattern" name="Pattern">
+        </div>
+
+        <div class="form-group">
+            <label for="material">Material</label>
+            <input type="text" id="material" name="Material">
+        </div>
+
+        <div class="form-group">
+            <label for="occasion">Occasion</label>
+            <input type="text" id="occasion" name="Occasion">
+        </div>
+
+        <div class="form-group">
+            <label for="season">Season</label>
+            <input type="text" id="season" name="Season">
+        </div>
+
+        <div class="form-group">
+            <label for="formalityLevel">Formality Level</label>
+            <input type="number" id="formalityLevel" name="FormalityLevel">
+        </div>
+
+        <div class="form-group">
+            <label for="layeringPotential">Layering Potential</label>
+            <input type="text" id="layeringPotential" name="LayeringPotential">
+        </div>
+
+        <div class="form-group">
+            <label for="styleKeywords">Style Keywords</label>
+            <textarea id="styleKeywords" name="StyleKeywords" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="State">
+        </div>
+
+        <div class="form-group">
+            <label for="careInstructions">Care Instructions</label>
+            <input type="text" id="careInstructions" name="CareInstructions">
+        </div>
+
+        <div class="form-group">
+            <label for="versatility">Versatility</label>
+            <input type="number" id="versatility" name="Versatility">
+        </div>
+
+        <div class="form-group">
+            <label for="lastWorn">Last Worn</label>
+            <input type="date" id="lastWorn" name="LastWorn">
+        </div>
+
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
+
+        <button type="button" onclick="submitForm()">Upload</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('clothingForm');
+            const formData = new FormData(form);
+
+            fetch('http://localhost:5000/upload_clothing', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || 'Clothing item uploaded successfully!');
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+/* Apply the fonts globally */
+body {
+    font-family: 'Lora', serif; /* Use Lora for body text */
+    background-color: #f8f9fa;  /* Light gray background for a clean, sophisticated feel */
+    color: #333;  /* Dark text for readability */
+}
+
+/* Use Playfair Display for titles and headings */
+h1, .card-title {
+    font-family: 'Playfair Display', serif; /* Elegant heading font */
+    font-weight: 700;  /* Bold for a classier look */
+    color: #2c3e50;  /* Deep navy blue for a refined touch */
+}
+
+/* Card styles */
+.card {
+    border-radius: 12px;
+    background-color: #2c3e50;  /* Deep navy blue for an elegant look */
+    color: #ffffff;  /* White text for contrast */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+/* Image styling */
+.card-img-top {
+    width: 100%;  /* Ensures images take the full card width */
+    height: 280px; /* Uniform height for consistency */
+    object-fit: cover; /* Ensures images maintain aspect ratio and fill space */
+    object-position: top; /* Aligns the image to show the top part */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* Title styling */
+.card-title {
+    font-size: 1.5rem;  /* Larger title font for elegance */
+    font-weight: bold;
+    letter-spacing: 0.5px;  /* Adds a refined touch */
+    color: #d4af37;  /* Muted gold for a luxurious accent */
+}
+
+/* Text inside the card */
+.card-text {
+    font-size: 1rem;
+    color: #e0e0e0;  /* Soft light gray for readability */
+    line-height: 1.6;  /* Improves readability */
+}
+
+/* Optional: Add a subtle hover effect on the card */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Button styles */
+.btn {
+    background-color: #d4af37;  /* Muted gold for buttons */
+    color: #2c3e50;  /* Dark navy for contrast */
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #e0c97f;  /* Slightly brighter gold on hover */
+}
+
+
+
+/* Hide the sidebar by default on mobile */
+@media (max-width: 767px) {
+    .sidebar {
+        display: none; /* Hide sidebar by default on mobile */
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px; /* Adjust the width as needed */
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px;
+        z-index: 1050; /* Ensure it's above content */
+        transition: transform 0.3s ease; /* For smooth sliding */
+        transform: translateX(-100%); /* Initially hidden off-screen */
+    }
+
+    /* Button that sticks to the top of the page */
+    .sidebar-toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1100; /* Above the sidebar */
+        background-color: #343a40;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+}
+
+/* Ensure sidebar is visible on larger screens */
+@media (min-width: 768px) {
+    .sidebar {
+        display: block; /* Sidebar is visible on larger screens */
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px;
+        height: 100vh;  /* Full height */
+        top: 0;
+       
+    }
+
+    /* Button should not be visible on larger screens */
+    .sidebar-toggle-btn {
+        display: none;
+    }
+}
+.content {
+    padding: 20px;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #ddd;
+}
+
+.btn-close {
+    font-size: 1.5rem; /* Adjust close button size */
+}
+
+@media (min-width: 767px) {
+    .show-on-mobile {
+        display: block; /* Show on mobile */
+        padding: 10px !important;
+    }
+
+    .hide-on-desktop {
+        display: none !important; /* Hide on desktop */
+        padding: 10px !important;
+        
+    }
+}
+
+
+.hide-on-desktop{
+    padding: 10px;
+}
