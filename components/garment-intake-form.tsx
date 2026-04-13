@@ -117,9 +117,20 @@ export function GarmentIntakeForm() {
     const endpoint = kind === "garment" ? "/api/analyze/garment" : "/api/analyze/tag";
     const formData = new FormData();
     formData.append("image", file);
+    const { data } = client ? await client.auth.getSession() : { data: { session: null } };
+
+    if (!data.session?.access_token) {
+      setError(true);
+      setMessage("Please sign in to use photo analysis.");
+      setLoadingAnalysis(null);
+      return;
+    }
 
     const response = await fetch(endpoint, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${data.session.access_token}`,
+      },
       body: formData,
     });
 
