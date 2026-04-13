@@ -57,6 +57,8 @@ export function GarmentIntakeForm() {
   const [tagAnalysis, setTagAnalysis] = useState<TagAnalysis | null>(null);
   const [loadingAnalysis, setLoadingAnalysis] = useState<null | "garment" | "tag">(null);
   const [saving, setSaving] = useState(false);
+  const [saveProgress, setSaveProgress] = useState(0);
+  const [savePhase, setSavePhase] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
@@ -180,6 +182,8 @@ export function GarmentIntakeForm() {
     setSaving(true);
     setError(false);
     setMessage("");
+    setSaveProgress(0);
+    setSavePhase("Preparing upload...");
 
     const formData = new FormData();
     if (garmentFile) {
@@ -208,20 +212,48 @@ export function GarmentIntakeForm() {
 
     const { data } = client ? await client.auth.getSession() : { data: { session: null } };
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 60_000);
+    const timeout = window.setTimeout(() => controller.abort(), 120_000);
 
     try {
-      const response = await fetch("/api/garments", {
-        method: "POST",
-        headers: data.session?.access_token ? { Authorization: `Bearer ${data.session.access_token}` } : {},
-        body: formData,
-        signal: controller.signal,
+      const response = await new Promise<Response>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/garments");
+        xhr.responseType = "json";
+        xhr.withCredentials = true;
+
+        if (data.session?.access_token) {
+          xhr.setRequestHeader("Authorization", `Bearer ${data.session.access_token}`);
+        }
+
+        xhr.upload.onprogress = (event) => {
+          if (!event.lengthComputable) {
+            setSavePhase("Uploading photos...");
+            return;
+          }
+
+          const percent = Math.max(1, Math.min(95, Math.round((event.loaded / event.total) * 100)));
+          setSaveProgress(percent);
+          setSavePhase(percent < 70 ? "Uploading photos..." : "Saving garment...");
+        };
+
+        xhr.onerror = () => reject(new Error("Unable to reach the server."));
+        xhr.onabort = () => reject(new DOMException("The request was aborted.", "AbortError"));
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            resolve(
+              new Response(JSON.stringify(xhr.response ?? {}), {
+                status: xhr.status,
+                headers: { "content-type": "application/json" },
+              }),
+            );
+          }
+        };
+
+        controller.signal.addEventListener("abort", () => xhr.abort(), { once: true });
+        xhr.send(formData);
       });
 
-      const contentType = response.headers.get("content-type") ?? "";
-      const payload = contentType.includes("application/json")
-        ? await response.json()
-        : { error: await response.text() };
+      const payload = (await response.json()) as { error?: string; message?: string };
 
       if (!response.ok) {
         setError(true);
@@ -229,6 +261,8 @@ export function GarmentIntakeForm() {
         return;
       }
 
+      setSaveProgress(100);
+      setSavePhase("Done.");
       setMessage(payload.message || "Garment saved.");
       router.push("/closet");
       router.refresh();
@@ -236,12 +270,18 @@ export function GarmentIntakeForm() {
       const message =
         submitError instanceof DOMException && submitError.name === "AbortError"
           ? "Saving took too long. Please try again."
-          : "Unable to save this piece.";
+          : submitError instanceof Error
+            ? submitError.message
+            : "Unable to save this piece.";
       setError(true);
       setMessage(message);
     } finally {
       window.clearTimeout(timeout);
       setSaving(false);
+      setTimeout(() => {
+        setSaveProgress(0);
+        setSavePhase("");
+      }, 1500);
     }
   }
 
@@ -525,6 +565,18 @@ export function GarmentIntakeForm() {
           </div>
 
           <div className={`message ${error ? "error" : "success"}`}>{message}</div>
+
+          {saving ? (
+            <div className="upload-status" aria-live="polite">
+              <div className="upload-status-row">
+                <span>{savePhase || "Saving..."}</span>
+                <span>{saveProgress}%</span>
+              </div>
+              <div className="upload-progress">
+                <div className="upload-progress-bar" style={{ width: `${Math.max(saveProgress, 8)}%` }} />
+              </div>
+            </div>
+          ) : null}
 
           <div className="form-actions">
             <button type="button" className="button button-secondary" onClick={() => router.push("/closet")}>

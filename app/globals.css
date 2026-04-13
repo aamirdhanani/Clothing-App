@@ -224,6 +224,35 @@ img { max-width: 100%; display: block; }
 .message { margin-top: 0.9rem; color: var(--muted-strong); font-size: 0.92rem; min-height: 1.25rem; }
 .message.success { color: var(--success); }
 .message.error { color: var(--danger); }
+.upload-status {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid rgba(216, 180, 106, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+}
+.upload-status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  color: var(--muted-strong);
+  font-size: 0.9rem;
+}
+.upload-progress {
+  height: 0.45rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+.upload-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f4e1b5, #c89545);
+  transition: width 0.2s ease;
+}
 .upload-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1rem; }
 .dropzone {
   padding: 1rem; border-radius: var(--radius-lg); min-height: 12rem; display: grid; gap: 0.8rem; place-content: center; text-align: center;

@@ -97,7 +97,8 @@ async function uploadFile(
 ) {
   const extension = file.name.split(".").pop() || "jpg";
   const filename = `${userId}/${prefix}-${crypto.randomUUID()}.${extension}`;
-  const result = await client.storage.from(bucket).upload(filename, file, {
+  const bytes = await file.arrayBuffer();
+  const result = await client.storage.from(bucket).upload(filename, bytes, {
     contentType: file.type,
     upsert: true,
   });
