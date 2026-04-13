@@ -207,25 +207,42 @@ export function GarmentIntakeForm() {
     formData.append("tagAnalysis", JSON.stringify(tagAnalysis ?? {}));
 
     const { data } = client ? await client.auth.getSession() : { data: { session: null } };
-    const response = await fetch("/api/garments", {
-      method: "POST",
-      headers: data.session?.access_token ? { Authorization: `Bearer ${data.session.access_token}` } : {},
-      body: formData,
-    });
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 60_000);
 
-    const payload = await response.json();
+    try {
+      const response = await fetch("/api/garments", {
+        method: "POST",
+        headers: data.session?.access_token ? { Authorization: `Bearer ${data.session.access_token}` } : {},
+        body: formData,
+        signal: controller.signal,
+      });
 
-    if (!response.ok) {
+      const contentType = response.headers.get("content-type") ?? "";
+      const payload = contentType.includes("application/json")
+        ? await response.json()
+        : { error: await response.text() };
+
+      if (!response.ok) {
+        setError(true);
+        setMessage(payload.error || "Please sign in to save this piece.");
+        return;
+      }
+
+      setMessage(payload.message || "Garment saved.");
+      router.push("/closet");
+      router.refresh();
+    } catch (submitError) {
+      const message =
+        submitError instanceof DOMException && submitError.name === "AbortError"
+          ? "Saving took too long. Please try again."
+          : "Unable to save this piece.";
       setError(true);
-      setMessage(payload.error || "Please sign in to save this piece.");
+      setMessage(message);
+    } finally {
+      window.clearTimeout(timeout);
       setSaving(false);
-      return;
     }
-
-    setMessage(payload.message || "Garment saved.");
-    setSaving(false);
-    router.push("/closet");
-    router.refresh();
   }
 
   return (
