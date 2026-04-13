@@ -64,13 +64,32 @@ export function TopNav() {
   return (
     <header className="site-nav">
       <div className="nav-panel">
-        <Link href={session ? "/closet" : "/"} className="brand" aria-label="Closet Atlas home">
-          <span className="brand-mark">
-            <span className="brand-mark-ring" />
-            <span className="brand-mark-letter">C</span>
-          </span>
-          <span className="brand-wordmark">Closet Atlas</span>
-        </Link>
+        <div className="nav-top">
+          <Link href={session ? "/closet" : "/"} className="brand" aria-label="Closet Atlas home">
+            <span className="brand-mark">
+              <span className="brand-mark-ring" />
+              <span className="brand-mark-letter">C</span>
+            </span>
+            <span className="brand-wordmark">Closet Atlas</span>
+          </Link>
+
+          <div className="nav-actions">
+            {loading ? null : session ? (
+              <>
+                <span className="avatar-placeholder" aria-hidden="true">
+                  {session.user.email?.[0]?.toUpperCase() ?? "A"}
+                </span>
+                <button type="button" className="button button-secondary nav-button" onClick={signOut}>
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className="button button-primary nav-button">
+                Sign in
+              </Link>
+            )}
+          </div>
+        </div>
 
         <div className="nav-center">
           {!loading && session ? (
@@ -86,23 +105,6 @@ export function TopNav() {
               ))}
             </nav>
           ) : null}
-        </div>
-
-        <div className="nav-actions">
-          {loading ? null : session ? (
-            <>
-              <span className="avatar-placeholder" aria-hidden="true">
-                {session.user.email?.[0]?.toUpperCase() ?? "A"}
-              </span>
-              <button type="button" className="button button-secondary nav-button" onClick={signOut}>
-                Sign out
-              </button>
-            </>
-          ) : (
-            <Link href="/login" className="button button-primary nav-button">
-              Sign in
-            </Link>
-          )}
         </div>
       </div>
     </header>

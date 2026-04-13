@@ -86,7 +86,16 @@ img { max-width: 100%; display: block; }
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .nav-panel {
-  border-radius: 999px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 1rem;
+  border-radius: 28px;
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.8rem;
+}
+.nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
 }
 .brand { display: inline-flex; align-items: center; gap: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .brand-wordmark { white-space: nowrap; }
@@ -99,7 +108,14 @@ img { max-width: 100%; display: block; }
 }
 .brand-mark-letter { position: relative; font-family: var(--font-display), serif; font-size: 1.2rem; }
 
-.nav-links { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.nav-center { display: flex; justify-content: flex-start; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
 .nav-link {
   color: var(--muted); padding: 0.7rem 0.95rem; border-radius: 999px; position: relative; transition: color 0.2s ease, background 0.2s ease;
 }
@@ -109,7 +125,7 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(90deg, transparent, rgba(216,180,106,0.95), transparent);
   animation: shimmer 2.2s ease-in-out infinite;
 }
-.nav-actions { display: flex; align-items: center; gap: 0.6rem; }
+.nav-actions { display: flex; align-items: center; gap: 0.6rem; justify-content: flex-end; flex-shrink: 0; }
 .avatar-placeholder {
   width: 2.4rem; height: 2.4rem; border-radius: 999px; display: grid; place-items: center;
   background: linear-gradient(135deg, rgba(216,180,106,0.18), rgba(255,255,255,0.06)); border: 1px solid rgba(216,180,106,0.25);
@@ -302,21 +318,35 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 760px) {
   .page-container, .site-nav { width: min(100% - 0.7rem, var(--content-width)); }
-  .site-nav { padding-top: 0.6rem; }
+  .site-nav { padding-top: 0.45rem; }
   .nav-panel {
     border-radius: 18px;
-    padding: 0.6rem 0.7rem;
-    flex-wrap: wrap;
-    align-items: center;
+    padding: 0.55rem;
+    gap: 0.45rem;
   }
-  .brand { gap: 0.55rem; font-size: 0.72rem; }
+  .nav-top { gap: 0.6rem; }
+  .brand { gap: 0.5rem; font-size: 0.72rem; }
   .brand-wordmark { display: none; }
-  .brand-mark { width: 2rem; height: 2rem; border-radius: 0.8rem; }
-  .nav-center { order: 3; width: 100%; justify-content: flex-start; }
-  .nav-links, .nav-actions { justify-content: space-between; width: 100%; }
-  .nav-link { padding: 0.58rem 0.78rem; font-size: 0.84rem; }
-  .nav-button { padding: 0.62rem 0.82rem; font-size: 0.88rem; }
-  .avatar-placeholder { width: 2rem; height: 2rem; }
+  .brand-mark { width: 1.9rem; height: 1.9rem; border-radius: 0.75rem; }
+  .nav-center {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.1rem;
+  }
+  .nav-links {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    width: max-content;
+  }
+  .nav-link {
+    padding: 0.5rem 0.72rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .nav-button { padding: 0.56rem 0.72rem; font-size: 0.84rem; }
+  .avatar-placeholder { width: 1.85rem; height: 1.85rem; font-size: 0.8rem; }
+  .nav-actions { gap: 0.45rem; }
+  .nav-top { align-items: center; }
   .feature-grid, .workflow-grid, .stat-grid, .closet-grid, .toolbar, .form-grid, .material-row, .form-actions { grid-template-columns: 1fr; }
   .span-2, .span-3 { grid-column: auto; }
   .section-head { align-items: flex-start; flex-direction: column; }
@@ -327,14 +357,8 @@ img { max-width: 100%; display: block; }
 /* Clean overrides for the app-like pass */
 .nav-panel {
   border-radius: 18px;
-  padding: 0.65rem 0.8rem;
+  padding: 0.65rem 0.7rem;
   background: rgba(8, 10, 15, 0.86);
-}
-
-.nav-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
 }
 
 .nav-button {
@@ -504,5 +528,9 @@ img { max-width: 100%; display: block; }
 
   .nav-panel {
     align-items: center;
+  }
+
+  .nav-top {
+    width: 100%;
   }
 }
