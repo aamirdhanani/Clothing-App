@@ -69,7 +69,7 @@ export function TopNav() {
             <span className="brand-mark-ring" />
             <span className="brand-mark-letter">C</span>
           </span>
-          <span>Closet Atlas</span>
+          <span className="brand-wordmark">Closet Atlas</span>
         </Link>
 
         <div className="nav-center">

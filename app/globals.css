@@ -22,6 +22,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+html, body { width: 100%; max-width: 100%; overflow-x: clip; }
 body {
   margin: 0;
   min-height: 100vh;
@@ -55,6 +56,21 @@ img { max-width: 100%; display: block; }
 .page-orb-center { bottom: -14rem; left: 28%; background: rgba(255, 255, 255, 0.08); animation-delay: -11s; }
 
 .app-shell { position: relative; z-index: 1; min-height: 100vh; }
+.app-shell,
+.page-container,
+.site-nav,
+.hero,
+.page-layout,
+.upload-layout,
+.login-shell,
+.closet-layout,
+.toolbar,
+.form-grid,
+.material-row,
+.nav-panel {
+  min-width: 0;
+  max-width: 100%;
+}
 .page-container, .site-nav {
   width: min(var(--content-width), calc(100% - 2rem));
   margin: 0 auto;
@@ -73,6 +89,7 @@ img { max-width: 100%; display: block; }
   border-radius: 999px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 1rem;
 }
 .brand { display: inline-flex; align-items: center; gap: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.brand-wordmark { white-space: nowrap; }
 .brand-mark {
   width: 2.35rem; height: 2.35rem; border-radius: 0.9rem; position: relative; display: grid; place-items: center;
   background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(216,180,106,0.92)); color: #090b10;
@@ -249,6 +266,13 @@ img { max-width: 100%; display: block; }
 .stack { display: grid; gap: 1rem; }
 .split { display: flex; gap: 0.7rem; flex-wrap: wrap; }
 .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 1rem 0; }
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
 .reveal { animation: fadeUp 0.75s ease both; }
 
 @keyframes fadeUp {
@@ -277,18 +301,33 @@ img { max-width: 100%; display: block; }
   .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
-  .page-container, .site-nav { width: min(100% - 1rem, var(--content-width)); }
-  .nav-panel { border-radius: 28px; padding: 0.85rem; flex-direction: column; align-items: stretch; }
-  .nav-links, .nav-actions { justify-content: space-between; }
-  .feature-grid, .workflow-grid, .stat-grid, .closet-grid, .toolbar, .form-grid, .material-row { grid-template-columns: 1fr; }
+  .page-container, .site-nav { width: min(100% - 0.7rem, var(--content-width)); }
+  .site-nav { padding-top: 0.6rem; }
+  .nav-panel {
+    border-radius: 18px;
+    padding: 0.6rem 0.7rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .brand { gap: 0.55rem; font-size: 0.72rem; }
+  .brand-wordmark { display: none; }
+  .brand-mark { width: 2rem; height: 2rem; border-radius: 0.8rem; }
+  .nav-center { order: 3; width: 100%; justify-content: flex-start; }
+  .nav-links, .nav-actions { justify-content: space-between; width: 100%; }
+  .nav-link { padding: 0.58rem 0.78rem; font-size: 0.84rem; }
+  .nav-button { padding: 0.62rem 0.82rem; font-size: 0.88rem; }
+  .avatar-placeholder { width: 2rem; height: 2rem; }
+  .feature-grid, .workflow-grid, .stat-grid, .closet-grid, .toolbar, .form-grid, .material-row, .form-actions { grid-template-columns: 1fr; }
   .span-2, .span-3 { grid-column: auto; }
   .section-head { align-items: flex-start; flex-direction: column; }
   .detail-card { position: static; }
+  .form-actions { justify-content: stretch; }
+  .form-actions .button { width: 100%; }
 }
 /* Clean overrides for the app-like pass */
 .nav-panel {
-  border-radius: 20px;
-  padding: 0.7rem 0.9rem;
+  border-radius: 18px;
+  padding: 0.65rem 0.8rem;
   background: rgba(8, 10, 15, 0.86);
 }
 
@@ -353,6 +392,7 @@ img { max-width: 100%; display: block; }
 .closet-shell {
   display: grid;
   gap: 1rem;
+  min-width: 0;
 }
 
 .page-head.clean-head {
@@ -458,18 +498,11 @@ img { max-width: 100%; display: block; }
 @media (max-width: 760px) {
   .page-head.clean-head,
   .section-head {
-    align-items: start;
+    align-items: flex-start;
     flex-direction: column;
   }
 
   .nav-panel {
-    border-radius: 18px;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .nav-center,
-  .nav-actions {
-    justify-content: space-between;
+    align-items: center;
   }
 }

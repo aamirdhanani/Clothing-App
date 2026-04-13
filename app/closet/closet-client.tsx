@@ -11,6 +11,7 @@ export function ClosetClient() {
   const client = useMemo(() => getSupabaseBrowserClient(), []);
   const [garments, setGarments] = useState<GarmentRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function load() {
@@ -38,6 +39,12 @@ export function ClosetClient() {
       }
 
       const payload = await response.json();
+      if (!response.ok) {
+        setError(payload.error || "We could not load your closet yet.");
+        setLoading(false);
+        return;
+      }
+
       setGarments(payload.garments ?? []);
       setLoading(false);
     }
@@ -47,6 +54,10 @@ export function ClosetClient() {
 
   if (loading) {
     return <div className="panel">Loading your closet...</div>;
+  }
+
+  if (error) {
+    return <div className="panel">{error}</div>;
   }
 
   return <ClosetBrowser garments={garments} />;

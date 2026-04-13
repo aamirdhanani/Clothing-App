@@ -81,11 +81,11 @@ export async function getGarments(userId?: string): Promise<GarmentRecord[]> {
 
   const { data, error } = await query;
 
-  if (error || !data?.length) {
-    return demoGarments;
+  if (error) {
+    throw error;
   }
 
-  return data.map((row) => mapRecord(row as Record<string, unknown>));
+  return (data ?? []).map((row) => mapRecord(row as Record<string, unknown>));
 }
 
 async function uploadFile(

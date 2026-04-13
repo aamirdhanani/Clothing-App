@@ -29,16 +29,29 @@ export function LoginForm() {
       return;
     }
 
+    const redirectTo =
+      typeof window !== "undefined" ? `${window.location.origin}/login` : undefined;
+
     const action =
       mode === "sign-in"
         ? client.auth.signInWithPassword({ email, password })
-        : client.auth.signUp({ email, password });
+        : client.auth.signUp({
+            email,
+            password,
+            options: redirectTo ? { emailRedirectTo: redirectTo } : undefined,
+          });
 
-    const { error: authError } = await action;
+    const { data, error: authError } = await action;
 
     if (authError) {
       setError(true);
       setMessage(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (mode === "sign-up" && !data.session) {
+      setMessage("Check your email to confirm your account.");
       setLoading(false);
       return;
     }

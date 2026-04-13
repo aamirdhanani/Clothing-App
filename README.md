@@ -50,6 +50,27 @@ Apply `supabase/schema.sql` to your project, then create these storage buckets:
 
 The app uses the Supabase service role key on the server for uploads and inserts.
 
+For auth, turn on the Email provider in Supabase Auth and set these URL settings:
+
+- Site URL: your deployed Vercel URL
+- Additional redirect URLs:
+  - `http://localhost:3000/login`
+  - your Vercel preview URLs
+  - your production `/login` URL
+
+The schema also creates a `profiles` table and a trigger so new auth users get a
+matching profile row automatically.
+
+## Check the Supabase connection
+
+After you run the app locally or deploy it, open:
+
+`/api/health/supabase`
+
+If everything is wired correctly, it will return `{ "ok": true, "connected": true }`.
+If something is missing, it will tell you whether the problem is the env vars,
+the tables, or the service role setup.
+
 ## OpenAI analysis
 
 The analysis routes use the OpenAI Responses API with structured outputs, which is

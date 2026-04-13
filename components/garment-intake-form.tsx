@@ -240,14 +240,6 @@ export function GarmentIntakeForm() {
             Capture the garment, read the label, and save the details you want to keep.
           </p>
         </div>
-        <div className="split">
-          <button type="button" className="button button-secondary" onClick={() => router.push("/closet")}>
-            Back to closet
-          </button>
-          <button className="button button-primary" type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Save piece"}
-          </button>
-        </div>
       </div>
 
       <div className="upload-layout">
@@ -516,6 +508,15 @@ export function GarmentIntakeForm() {
           </div>
 
           <div className={`message ${error ? "error" : "success"}`}>{message}</div>
+
+          <div className="form-actions">
+            <button type="button" className="button button-secondary" onClick={() => router.push("/closet")}>
+              Back to closet
+            </button>
+            <button className="button button-primary" type="submit" disabled={saving}>
+              {saving ? "Saving..." : "Save piece"}
+            </button>
+          </div>
         </div>
       </div>
     </form>
