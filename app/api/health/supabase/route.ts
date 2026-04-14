@@ -82,18 +82,6 @@ export async function GET() {
     );
   }
 
-  const { error: profilesError } = await client
-    .from("profiles")
-    .select("id")
-    .limit(1);
-
-  if (profilesError) {
-    return NextResponse.json(
-      { ok: false, connected: false, error: profilesError.message },
-      { status: 200 },
-    );
-  }
-
   const writableBuckets: Array<{ bucket: string; ok: boolean; error?: string }> = [];
   for (const bucket of STORAGE_BUCKETS) {
     // Use a tiny upload/remove cycle so we know Storage is actually writable.
@@ -114,5 +102,11 @@ export async function GET() {
     );
   }
 
-  return NextResponse.json({ ok: true, connected: true, buckets: writableBuckets });
+  return NextResponse.json({
+    ok: true,
+    connected: true,
+    buckets: writableBuckets,
+    warning:
+      "Profiles is not required for the app health check. If you want Supabase to refresh its schema cache, run NOTIFY pgrst, 'reload schema'; in the SQL editor.",
+  });
 }

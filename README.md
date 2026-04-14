@@ -71,6 +71,13 @@ If everything is wired correctly, it will return `{ "ok": true, "connected": tru
 If something is missing, it will tell you whether the problem is the env vars,
 the tables, or the service role setup.
 
+If Supabase still says a table is missing right after running the SQL, refresh the
+schema cache by running this once in the SQL editor:
+
+```sql
+NOTIFY pgrst, 'reload schema';
+```
+
 ## OpenAI analysis
 
 The analysis routes use the OpenAI Responses API with structured outputs, which is
