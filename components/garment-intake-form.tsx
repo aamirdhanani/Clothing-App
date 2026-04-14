@@ -335,13 +335,13 @@ export function GarmentIntakeForm() {
                 </div>
               </div>
             ) : (
-              <>
+              <div className="dropzone-copy">
                 <div className="eyebrow">Photo</div>
                 <h2 className="display" style={{ margin: 0 }}>
                   Garment image
                 </h2>
                 <p className="help-text">Use a clean photo with the shape of the piece clearly visible.</p>
-              </>
+              </div>
             )}
             <input
               ref={garmentInput}
@@ -350,7 +350,7 @@ export function GarmentIntakeForm() {
               hidden
               onChange={(event) => setGarmentFile(event.target.files?.[0] ?? null)}
             />
-            <div className="split">
+            <div className="dropzone-actions">
               <button type="button" className="button button-secondary" onClick={() => garmentInput.current?.click()}>
                 Choose photo
               </button>
@@ -384,13 +384,13 @@ export function GarmentIntakeForm() {
                 </div>
               </div>
             ) : (
-              <>
+              <div className="dropzone-copy">
                 <div className="eyebrow">Label</div>
                 <h2 className="display" style={{ margin: 0 }}>
                   Care label
                 </h2>
                 <p className="help-text">Capture the label so materials, origin, and care details are stored.</p>
-              </>
+              </div>
             )}
             <input
               ref={tagInput}
@@ -399,7 +399,7 @@ export function GarmentIntakeForm() {
               hidden
               onChange={(event) => setTagFile(event.target.files?.[0] ?? null)}
             />
-            <div className="split">
+            <div className="dropzone-actions">
               <button type="button" className="button button-secondary" onClick={() => tagInput.current?.click()}>
                 Choose label
               </button>

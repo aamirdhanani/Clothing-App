@@ -267,8 +267,31 @@ img { max-width: 100%; display: block; }
 }
 .upload-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1rem; }
 .dropzone {
-  padding: 1rem; border-radius: var(--radius-lg); min-height: 12rem; display: grid; gap: 0.8rem; place-content: center; text-align: center;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  min-height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
   border-style: dashed; border-width: 1.5px; border-color: rgba(255,255,255,0.12); position: relative; overflow: hidden;
+}
+.dropzone-copy {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  max-width: 32rem;
+}
+.dropzone-actions {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+.dropzone-actions .button {
+  min-height: 3rem;
 }
 .dropzone::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1px dashed rgba(216,180,106,0.22); opacity: 0.55; pointer-events: none; animation: dash 5s linear infinite;
@@ -395,6 +418,8 @@ img { max-width: 100%; display: block; }
   .form-actions { justify-content: stretch; }
   .form-actions .button { width: 100%; }
   .detail-actions { flex-direction: column; }
+  .dropzone { min-height: 10.5rem; }
+  .dropzone-actions .button { width: 100%; }
 }
 /* Clean overrides for the app-like pass */
 .nav-panel {
