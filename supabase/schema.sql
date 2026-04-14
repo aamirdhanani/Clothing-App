@@ -45,7 +45,7 @@ for each row execute function public.handle_new_user();
 
 create table if not exists public.garments (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id text not null,
   name text not null,
   category text not null,
   brand text not null,
@@ -89,29 +89,29 @@ create policy "Users can read own garments"
   on public.garments
   for select
   to authenticated
-  using (auth.uid() = user_id);
+  using (auth.uid()::text = user_id);
 
 drop policy if exists "Users can insert own garments" on public.garments;
 create policy "Users can insert own garments"
   on public.garments
   for insert
   to authenticated
-  with check (auth.uid() = user_id);
+  with check (auth.uid()::text = user_id);
 
 drop policy if exists "Users can update own garments" on public.garments;
 create policy "Users can update own garments"
   on public.garments
   for update
   to authenticated
-  using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
+  using (auth.uid()::text = user_id)
+  with check (auth.uid()::text = user_id);
 
 drop policy if exists "Users can delete own garments" on public.garments;
 create policy "Users can delete own garments"
   on public.garments
   for delete
   to authenticated
-  using (auth.uid() = user_id);
+  using (auth.uid()::text = user_id);
 
 insert into storage.buckets (id, name, public)
 values ('garment-images', 'garment-images', true)
