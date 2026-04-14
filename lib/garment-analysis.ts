@@ -36,6 +36,60 @@ const tagAnalysisSchema = z.object({
 
 const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
 
+function toTitleCase(value: string) {
+  return value
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase()
+    .split(" ")
+    .map((word) =>
+      word
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join("-"),
+    )
+    .join(" ");
+}
+
+function normalizeSize(value: string) {
+  return value.trim().replace(/\s+/g, " ").toUpperCase();
+}
+
+function normalizeTextList(values: string[]) {
+  return values.map((value) => toTitleCase(value));
+}
+
+function normalizeGarmentAnalysis(analysis: GarmentAnalysis): GarmentAnalysis {
+  return {
+    ...analysis,
+    garmentType: toTitleCase(analysis.garmentType),
+    brandGuess: analysis.brandGuess ? toTitleCase(analysis.brandGuess) : null,
+    primaryColor: toTitleCase(analysis.primaryColor),
+    secondaryColors: normalizeTextList(analysis.secondaryColors),
+    pattern: analysis.pattern ? toTitleCase(analysis.pattern) : null,
+    styleTags: normalizeTextList(analysis.styleTags),
+    season: normalizeTextList(analysis.season),
+    occasion: normalizeTextList(analysis.occasion),
+    fit: analysis.fit ? toTitleCase(analysis.fit) : null,
+    notes: analysis.notes ? analysis.notes.trim() : null,
+  };
+}
+
+function normalizeTagAnalysis(analysis: TagAnalysis): TagAnalysis {
+  return {
+    ...analysis,
+    materials: analysis.materials.map((entry) => ({
+      material: toTitleCase(entry.material),
+      percentage: entry.percentage,
+    })),
+    careInstructions: normalizeTextList(analysis.careInstructions),
+    countryOfOrigin: analysis.countryOfOrigin ? toTitleCase(analysis.countryOfOrigin) : null,
+    size: analysis.size ? normalizeSize(analysis.size) : null,
+    brand: analysis.brand ? toTitleCase(analysis.brand) : null,
+    rawText: analysis.rawText.trim(),
+  };
+}
+
 function getClient() {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -84,7 +138,7 @@ export async function analyzeGarmentImage(file: File): Promise<GarmentAnalysis> 
     throw new Error("Unable to parse garment analysis response.");
   }
 
-  return response.output_parsed;
+  return normalizeGarmentAnalysis(response.output_parsed);
 }
 
 export async function analyzeTagImage(file: File): Promise<TagAnalysis> {
@@ -120,5 +174,5 @@ export async function analyzeTagImage(file: File): Promise<TagAnalysis> {
     throw new Error("Unable to parse tag analysis response.");
   }
 
-  return response.output_parsed;
+  return normalizeTagAnalysis(response.output_parsed);
 }

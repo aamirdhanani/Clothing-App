@@ -48,8 +48,8 @@ create table if not exists public.garments (
   user_id uuid not null references auth.users(id) on delete cascade,
   name text not null,
   category text not null,
-  brand text,
-  size text,
+  brand text not null,
+  size text not null,
   primary_color text not null,
   secondary_colors text[] not null default '{}',
   pattern text,
@@ -67,6 +67,15 @@ create table if not exists public.garments (
   ai_analysis jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
+
+update public.garments
+set brand = coalesce(nullif(trim(brand), ''), 'Unknown'),
+    size = coalesce(nullif(trim(size), ''), 'Unknown')
+where brand is null or trim(brand) = '' or size is null or trim(size) = '';
+
+alter table public.garments
+  alter column brand set not null,
+  alter column size set not null;
 
 create index if not exists garments_user_id_idx on public.garments (user_id);
 create index if not exists garments_category_idx on public.garments (category);

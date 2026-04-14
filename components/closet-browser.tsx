@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { GarmentRecord } from "@/lib/types";
 
@@ -8,11 +8,30 @@ function unique(values: Array<string | null | undefined>) {
   return [...new Set(values.filter((value): value is string => Boolean(value)))].sort();
 }
 
-export function ClosetBrowser({ garments }: { garments: GarmentRecord[] }) {
+export function ClosetBrowser({
+  garments,
+  onDelete,
+  onJustWorn,
+}: {
+  garments: GarmentRecord[];
+  onDelete: (id: string) => Promise<void> | void;
+  onJustWorn: (id: string) => Promise<void> | void;
+}) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("all");
   const [color, setColor] = useState("all");
   const [selectedId, setSelectedId] = useState(garments[0]?.id ?? "");
+
+  useEffect(() => {
+    if (!garments.length) {
+      setSelectedId("");
+      return;
+    }
+
+    if (!garments.some((item) => item.id === selectedId)) {
+      setSelectedId(garments[0].id);
+    }
+  }, [garments, selectedId]);
 
   const types = unique(garments.map((item) => item.category));
   const colors = unique(garments.map((item) => item.primary_color));
@@ -28,6 +47,18 @@ export function ClosetBrowser({ garments }: { garments: GarmentRecord[] }) {
   }, [garments, query, type, color]);
 
   const selected = filtered.find((item) => item.id === selectedId) ?? filtered[0];
+
+  async function handleJustWorn() {
+    if (!selected) return;
+    await onJustWorn(selected.id);
+  }
+
+  async function handleDelete() {
+    if (!selected) return;
+    const confirmed = window.confirm(`Delete ${selected.name}? This cannot be undone.`);
+    if (!confirmed) return;
+    await onDelete(selected.id);
+  }
 
   return (
     <div className="closet-shell reveal">
@@ -111,6 +142,15 @@ export function ClosetBrowser({ garments }: { garments: GarmentRecord[] }) {
                   <div className="detail-row"><div className="detail-key">Material</div><div className="detail-value">{selected.material_composition.map((entry) => `${entry.material}${entry.percentage ? ` ${entry.percentage}%` : ""}`).join(", ")}</div></div>
                   <div className="detail-row"><div className="detail-key">Care</div><div className="detail-value">{selected.care_instructions.join(", ")}</div></div>
                   <div className="detail-row"><div className="detail-key">Last worn</div><div className="detail-value">{selected.last_worn_at ? new Date(selected.last_worn_at).toLocaleDateString() : "Never"}</div></div>
+                </div>
+
+                <div className="detail-actions">
+                  <button type="button" className="button button-secondary detail-action" onClick={handleJustWorn}>
+                    Just worn
+                  </button>
+                  <button type="button" className="button button-ghost detail-action danger" onClick={handleDelete}>
+                    Delete
+                  </button>
                 </div>
               </div>
             </>

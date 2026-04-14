@@ -382,6 +382,7 @@ img { max-width: 100%; display: block; }
   .detail-card { position: static; }
   .form-actions { justify-content: stretch; }
   .form-actions .button { width: 100%; }
+  .detail-actions { flex-direction: column; }
 }
 /* Clean overrides for the app-like pass */
 .nav-panel {
@@ -474,6 +475,22 @@ img { max-width: 100%; display: block; }
 .detail-stack {
   display: grid;
   gap: 1rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.detail-action {
+  flex: 1;
+}
+
+.detail-action.danger {
+  color: var(--danger);
+  border-color: rgba(255, 135, 150, 0.2);
 }
 
 .form-panel {

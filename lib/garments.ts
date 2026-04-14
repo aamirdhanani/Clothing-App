@@ -30,6 +30,10 @@ function normalizeString(value: FormDataEntryValue | unknown) {
   return trimmed.length ? trimmed : null;
 }
 
+function todayInLocalDate() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
+}
+
 function mapRecord(row: Record<string, unknown>): GarmentRecord {
   return {
     id: String(row.id),
@@ -146,6 +150,10 @@ export async function saveGarmentFromFormData(formData: FormData) {
     careInstructions: toArray(formData.get("careInstructions")),
     materials: toArray(formData.get("materials")),
   };
+
+  if (!manual.brand || !manual.size) {
+    throw new Error("Brand and size are required before saving.");
+  }
 
   const parsedAnalysis =
     typeof analysis === "string" && analysis.length > 0
@@ -275,4 +283,42 @@ export async function saveGarmentFromFormData(formData: FormData) {
     garment: mapRecord(data as Record<string, unknown>),
     message: "Garment saved successfully.",
   };
+}
+
+export async function setGarmentLastWorn(userId: string, garmentId: string) {
+  const client = getSupabaseAdminClient();
+
+  if (!client) {
+    throw new Error("Supabase is not configured.");
+  }
+
+  const { data, error } = await client
+    .from("garments")
+    .update({ last_worn_at: todayInLocalDate() })
+    .eq("id", garmentId)
+    .eq("user_id", userId)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return mapRecord(data as Record<string, unknown>);
+}
+
+export async function deleteGarment(userId: string, garmentId: string) {
+  const client = getSupabaseAdminClient();
+
+  if (!client) {
+    throw new Error("Supabase is not configured.");
+  }
+
+  const { error } = await client.from("garments").delete().eq("id", garmentId).eq("user_id", userId);
+
+  if (error) {
+    throw error;
+  }
+
+  return { deleted: true };
 }

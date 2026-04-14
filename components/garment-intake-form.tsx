@@ -221,6 +221,13 @@ export function GarmentIntakeForm() {
     formData.append("analysis", JSON.stringify(analysis ?? {}));
     formData.append("tagAnalysis", JSON.stringify(tagAnalysis ?? {}));
 
+    if (!brand.trim() || !size.trim()) {
+      setError(true);
+      setMessage("Brand and size are required.");
+      setSaving(false);
+      return;
+    }
+
     const { data } = client ? await client.auth.getSession() : { data: { session: null } };
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 120_000);
@@ -435,12 +442,12 @@ export function GarmentIntakeForm() {
 
             <label className="field">
               <span className="label">Brand</span>
-              <input className="input" value={brand} onChange={(event) => setBrand(event.target.value)} placeholder="Theory" />
+              <input className="input" value={brand} onChange={(event) => setBrand(event.target.value)} placeholder="Theory" required />
             </label>
 
             <label className="field">
               <span className="label">Size</span>
-              <input className="input" value={size} onChange={(event) => setSize(event.target.value)} placeholder="M" />
+              <input className="input" value={size} onChange={(event) => setSize(event.target.value)} placeholder="M" required />
             </label>
 
             <label className="field">
